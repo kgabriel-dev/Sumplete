@@ -40,7 +40,65 @@ def split_number(number: int, count: int, parts_input: list[int]) -> list[int]:
 
 
 def __main__():
-    print(split_number(10, 3, []))
+    grid_size = 5
+    grid: list[list[int]] = [[-1] * grid_size for _ in range(grid_size)]
+    
+    # Store the results for vertical and horizontal sums
+    results = {
+        "v": random.sample(range(grid_size + 4, grid_size * 3), grid_size),
+        "h": [0] * grid_size
+    }
+
+    # Keep track of what numbers are correct and which are fillers
+    correct_numbers = [[False] * grid_size for _ in range(grid_size)]
+
+    for y in range(grid_size):
+        # Solve the row
+        row = split_number(results["v"][y], random.randint(1, grid_size), [])
+        
+        # Calculate the index for every number in the row
+        random_indices = [j for j in range(grid_size)]
+        random.shuffle(random_indices)
+
+        for j in range(grid_size):
+            index = random_indices[j]
+            
+            if j < len(row):
+                grid[y][index] = row[j]
+                correct_numbers[y][index] = True
+            else:
+                grid[y][index] = random.randint(1, results["v"][y])
+
+    # Calculate the horizontal results based on the columns
+    for x in range(grid_size):
+        numbers = [grid[y][x] for y in range(grid_size) if correct_numbers[y][x]]
+
+        results["h"][x] = sum(numbers)
+    
+    # Print the grid and results
+    for y, row in enumerate(grid):
+        print(results["v"][y], row)
+    print(results["h"])
+
+    print("\nVerification:\n")
+
+    # Print correct numbers for verification
+    for y, row in enumerate(grid):
+        print(results["v"][y], [grid[y][x] if correct_numbers[y][x] else 0 for x in range(grid_size)])
+    print(results["h"])
+
+    # Check the solution
+    for y in range(grid_size):
+        row_result = results["v"][y]
+
+        row_sum = sum(grid[y][x] for x in range(grid_size) if correct_numbers[y][x])
+        assert row_sum == row_result, f"Row {y} sum {row_sum} does not match expected {row_result}"
+
+    for x in range(grid_size):
+        col_result = results["h"][x]
+
+        col_sum = sum(grid[y][x] for y in range(grid_size) if correct_numbers[y][x])
+        assert col_sum == col_result, f"Column {x} sum {col_sum} does not match expected {col_result}"
 
 
 if __name__ == "__main__":
