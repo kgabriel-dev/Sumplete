@@ -1,0 +1,29 @@
+.cell {
+    border: 1px solid #ccc;
+    aspect-ratio: 1;
+    width: 40px;
+}
+
+.cell-correct {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.cell-wrong {
+    background-color: #F44336;
+    color: white;
+}
+
+.result-cell-right {
+    border: 1px solid #ccc;
+    border-left: 2px solid #ccc;
+}
+
+.result-cell-bottom {
+    border: 1px solid #ccc;
+    border-top: 2px solid #ccc;
+}
+
+.row {
+    display: flex;
+}
