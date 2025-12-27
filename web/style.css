@@ -2,16 +2,23 @@
     border: 1px solid #ccc;
     aspect-ratio: 1;
     width: 40px;
+    text-align: center;
+    align-content: center;
 }
 
-.cell-correct {
-    background-color: #4CAF50;
+.cell-marked-correct {
+    background-color: #A5D6A7;
     color: white;
 }
 
-.cell-wrong {
-    background-color: #F44336;
+.cell-marked-wrong {
+    background-color: #EF9A9A;
     color: white;
+}
+
+.cell-unmarked {
+    background-color: white;
+    color: black;
 }
 
 .result-cell-right {
@@ -22,6 +29,16 @@
 .result-cell-bottom {
     border: 1px solid #ccc;
     border-top: 2px solid #ccc;
+}
+
+.result-cell-correct {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.result-cell-wrong {
+    background-color: #F44336;
+    color: white;
 }
 
 .row {

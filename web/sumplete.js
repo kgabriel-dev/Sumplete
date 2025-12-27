@@ -21,6 +21,10 @@ function initializeGame(gridSize) {
             row.appendChild(cell);
             gridCells[i] = gridCells[i] || [];
             gridCells[i][j] = cell;
+            // Add click event listener to toggle cell state
+            cell.addEventListener('click', () => {
+                toggleCell(cell, i, j);
+            });
         }
         // Append the result column
         const resultCell = document.createElement('div');
@@ -68,7 +72,6 @@ function createNumbers(gameGrid) {
         // Meaning correct numbers on correct cells, random numbers at wrong cells
         for (let column = 0; column < GRID_SIZE; column++) {
             gameGrid[row][column].innerText = (correctCells[row][column] ? correctNumbers.pop() || 0 : Math.ceil(Math.random() * GRID_SIZE)).toString();
-            gameGrid[row][column].classList.add(correctCells[row][column] ? 'cell-correct' : 'cell-wrong');
         }
         // Place the results in the corresponding cell
         gameGrid[row][GRID_SIZE].innerText = resultsPerRow[row].toString();
@@ -110,7 +113,78 @@ function splitNumber(num, count, partsInput = []) {
         partsOutput.push(SPACEHOLDER_VALUE);
     return splitNumber(num, count, partsOutput);
 }
-const gameGrid = initializeGame(5);
+function toggleCell(cell, row, column) {
+    if (!gameGrid)
+        return;
+    const currentState = cellStates[row][column];
+    // Cycle through states: 0 -> 1 -> 2 -> 0
+    const newState = (currentState + 1) % 3;
+    cellStates[row][column] = newState;
+    // Update cell appearance based on state
+    cell.classList.remove('cell-unselected', 'cell-marked-wrong', 'cell-marked-correct');
+    switch (newState) {
+        case 0:
+            cell.classList.add('cell-unmarked');
+            cell.classList.remove('cell-marked-wrong', 'cell-marked-correct');
+            break;
+        case 1:
+            cell.classList.add('cell-marked-wrong');
+            cell.classList.remove('cell-unmarked', 'cell-marked-correct');
+            break;
+        case 2:
+            cell.classList.add('cell-marked-correct');
+            cell.classList.remove('cell-unmarked', 'cell-marked-wrong');
+            break;
+    }
+    // Update the state of the corresponding result cells
+    // Check if the whole row's sum is correct - Not that all correct cells must be marked correct, but the sum must match
+    const resultCellRight = gameGrid[row][GRID_SIZE];
+    let rowSum = 0;
+    let expectedRowSum = parseInt(resultCellRight.innerText);
+    for (let j = 0; j < GRID_SIZE; j++) {
+        if (cellStates[row][j] === 2) {
+            rowSum += parseInt(gameGrid[row][j].innerText);
+        }
+    }
+    if (rowSum === expectedRowSum) {
+        resultCellRight.classList.add('result-cell-correct');
+        resultCellRight.classList.remove('result-cell-wrong');
+    }
+    else if (rowSum > 0) {
+        resultCellRight.classList.add('result-cell-wrong');
+        resultCellRight.classList.remove('result-cell-correct');
+    }
+    else {
+        resultCellRight.classList.remove('result-cell-correct', 'result-cell-wrong');
+    }
+    // Check if the whole column's sum is correct
+    const resultCellBottom = gameGrid[GRID_SIZE][column];
+    let columnSum = 0;
+    let expectedColumnSum = parseInt(resultCellBottom.innerText);
+    for (let i = 0; i < GRID_SIZE; i++) {
+        if (cellStates[i][column] === 2) {
+            columnSum += parseInt(gameGrid[i][column].innerText);
+        }
+    }
+    if (columnSum === expectedColumnSum) {
+        resultCellBottom.classList.add('result-cell-correct');
+        resultCellBottom.classList.remove('result-cell-wrong');
+    }
+    else {
+        resultCellBottom.classList.add('result-cell-wrong');
+        resultCellBottom.classList.remove('result-cell-correct');
+    }
+}
+const GRID_SIZE = 5;
+const gameGrid = initializeGame(GRID_SIZE);
+const cellStates = [];
 if (gameGrid) {
     createNumbers(gameGrid);
+    // Initialize cell states
+    for (let i = 0; i < GRID_SIZE; i++) {
+        cellStates[i] = [];
+        for (let j = 0; j < GRID_SIZE; j++) {
+            cellStates[i][j] = 0; // 0: unselected, 1: marked wrong, 2: marked correct
+        }
+    }
 }
