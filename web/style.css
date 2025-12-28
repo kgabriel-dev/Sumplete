@@ -6,13 +6,24 @@
     align-content: center;
 }
 
+.cell-hovered {
+    background-color: #E0E0E0;
+    transition: background-color 0.4s;
+}
+.cell-marked-correct.cell-hovered {
+    background-color: hsl(120, 75%, 45%);
+}
+.cell-marked-wrong.cell-hovered {
+    background-color: hsl(0, 100%, 70%);
+}
+
 .cell-marked-correct {
-    background-color: #A5D6A7;
+    background-color: hsl(120, 75%, 40%);
     color: white;
 }
 
 .cell-marked-wrong {
-    background-color: #EF9A9A;
+    background-color: hsl(0, 100%, 65%);
     color: white;
 }
 
@@ -32,12 +43,12 @@
 }
 
 .result-cell-correct {
-    background-color: #4CAF50;
+    background-color: hsl(140, 100%, 60%);
     color: white;
 }
 
 .result-cell-wrong {
-    background-color: #F44336;
+    background-color: hsl(0, 100%, 60%);
     color: white;
 }
 

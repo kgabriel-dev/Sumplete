@@ -31,7 +31,16 @@ function initializeGame(gridSize: number): HTMLDivElement[][] | undefined {
             // Add click event listener to toggle cell state
             cell.addEventListener('click', () => {
                 toggleCell(cell, i, j);
-            })
+            });
+
+            // Add hover effects
+            cell.addEventListener('mouseenter', () => {
+                cell.classList.add('cell-hovered');
+            });
+
+            cell.addEventListener('mouseleave', () => {
+                cell.classList.remove('cell-hovered');
+            });
         }
 
         // Append the result column
