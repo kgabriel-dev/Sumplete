@@ -296,11 +296,11 @@ if(gameGrid) {
             // Start the timer
             timerInterval = setInterval(() => {
                 timerTime++;
-                const timerElement = document.getElementById('timer');
+                const timerElement = document.getElementById('time-elapsed');
                 if(timerElement) {
                     const minutes = Math.floor(timerTime / 60).toString().padStart(2, '0');
                     const seconds = (timerTime % 60).toString().padStart(2, '0');
-                    timerElement.innerText = `Time: ${minutes}:${seconds}`;
+                    timerElement.innerText = `${minutes}:${seconds}`;
                 }
             }, 1000);
         });
@@ -312,12 +312,7 @@ if(gameGrid) {
             if(timerInterval != undefined) {
                 clearInterval(timerInterval);
                 timerInterval = undefined;
-                timerTime = 0;
-
-                const timerElement = document.getElementById('time-elapsed');
-                if(timerElement) {
-                    timerElement.innerText = "00:00";
-                }
+                timerTime = 0; // Reset timer time internally, but don't update display yet
 
                 if(gameContainer)
                     gameContainer.classList.add('blurred');
