@@ -37,19 +37,6 @@ function initializeGame(gridSize: number): HTMLDivElement[][] | undefined {
 
                 // Check for win condition
                 checkWin();
-
-                // Start the timer on the first click
-                if(timerInterval == undefined) {
-                    timerInterval = setInterval(() => {
-                        timerTime++;
-                        const timerElement = document.getElementById('timer');
-                        if(timerElement) {
-                            const minutes = Math.floor(timerTime / 60).toString().padStart(2, '0');
-                            const seconds = (timerTime % 60).toString().padStart(2, '0');
-                            timerElement.innerText = `Time: ${minutes}:${seconds}`;
-                        }
-                    }, 1000);
-                }
             });
 
             // Add hover effects
@@ -283,5 +270,35 @@ if(gameGrid) {
         for(let j = 0; j < GRID_SIZE; j++) {
             cellStates[i][j] = 0; // 0: unselected, 1: marked wrong, 2: marked correct
         }
+    }
+
+    // Blur the game container initially
+    const gameContainer = document.getElementById('game-container');
+    if(gameContainer) {
+        gameContainer.classList.add('blurred');
+    }
+
+    const startButton = document.getElementById('start-button');
+    if(startButton) {
+        startButton.addEventListener('click', () => {
+            // Remove the blur from the game container
+            if(gameContainer) {
+                gameContainer.classList.remove('blurred');
+            }
+
+            // Hide the start button
+            startButton.style.display = 'none';
+
+            // Start the timer
+            timerInterval = setInterval(() => {
+                timerTime++;
+                const timerElement = document.getElementById('timer');
+                if(timerElement) {
+                    const minutes = Math.floor(timerTime / 60).toString().padStart(2, '0');
+                    const seconds = (timerTime % 60).toString().padStart(2, '0');
+                    timerElement.innerText = `Time: ${minutes}:${seconds}`;
+                }
+            }, 1000);
+        });
     }
 }
