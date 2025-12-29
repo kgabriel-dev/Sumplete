@@ -8,6 +8,9 @@
     margin: 1px;
     color: hsl(210, 100%, 70%);
     cursor: pointer;
+
+    /* Prevent text selection */
+    user-select: none;
 }
 
 .cell-hovered {
