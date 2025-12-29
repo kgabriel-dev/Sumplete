@@ -62,13 +62,28 @@
     display: flex;
 }
 
-.container {
+#container {
     max-width: 600px;
     margin: auto;
     padding: 20px;
     font-family: Arial, sans-serif;
     text-align: center;
 }
+
+#header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 20px;
+    border-bottom: 2px solid #ffbd2f;
+    text-transform: uppercase;
+}
+
+#header p {
+    margin: 20px;
+    font-size: 1.2em;
+}
+
 
 #game-container {
     display: inline-block;
