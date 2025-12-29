@@ -55,3 +55,17 @@
 .row {
     display: flex;
 }
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+#game-container {
+    display: inline-block;
+    width: fit-content;
+    margin-top: 20px;
+}
