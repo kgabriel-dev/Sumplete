@@ -1,3 +1,6 @@
+let timerInterval: number;
+let timerTime = 0;
+
 function initializeGame(gridSize: number): HTMLDivElement[][] | undefined {
     if(gridSize < 1) {
         console.error('Grid size must be at least 1');
@@ -31,6 +34,22 @@ function initializeGame(gridSize: number): HTMLDivElement[][] | undefined {
             // Add click event listener to toggle cell state
             cell.addEventListener('click', () => {
                 toggleCell(cell, i, j);
+
+                // Check for win condition
+                checkWin();
+
+                // Start the timer on the first click
+                if(timerInterval == undefined) {
+                    timerInterval = setInterval(() => {
+                        timerTime++;
+                        const timerElement = document.getElementById('timer');
+                        if(timerElement) {
+                            const minutes = Math.floor(timerTime / 60).toString().padStart(2, '0');
+                            const seconds = (timerTime % 60).toString().padStart(2, '0');
+                            timerElement.innerText = `Time: ${minutes}:${seconds}`;
+                        }
+                    }, 1000);
+                }
             });
 
             // Add hover effects
@@ -67,6 +86,30 @@ function initializeGame(gridSize: number): HTMLDivElement[][] | undefined {
     }
 
     return gridCells;
+}
+
+function checkWin(): void {
+    if(!gameGrid) return;
+
+    // Check if all result cells are marked correct
+    const GRID_SIZE = gameGrid.length - 1;
+
+    // Check rows and columns; if any is incorrect, return
+    for(let i = 0; i < GRID_SIZE; i++) {
+        const resultCellRight = gameGrid[i][GRID_SIZE];
+        const resultCellBottom = gameGrid[GRID_SIZE][i];
+
+        if(!resultCellRight.classList.contains('result-cell-correct') ||
+           !resultCellBottom.classList.contains('result-cell-correct')) {
+            return;
+        }
+    }
+
+    // If all result cells are correct, the player has won
+    clearInterval(timerInterval);
+    timerInterval = 0;
+
+    alert(`Congratulations! You've completed the puzzle in ${Math.floor(timerTime / 60).toString().padStart(2, '0')}:${(timerTime % 60).toString().padStart(2, '0')}!`);
 }
 
 function createNumbers(gameGrid: HTMLDivElement[][]): void {
@@ -111,8 +154,6 @@ function createNumbers(gameGrid: HTMLDivElement[][]): void {
     }
 
     // Define the results displayed along the x-axis
-    const resultsPerColumn: number[] = [];
-
     for(let column = 0; column < GRID_SIZE; column++) {
         let columnSum = 0;
 
