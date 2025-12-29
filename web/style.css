@@ -101,7 +101,7 @@ body {
     pointer-events: none;
 }
 
-#start-button {
+.button {
     display: block;
     margin: 20px auto 0 auto;
     padding: 10px 20px;

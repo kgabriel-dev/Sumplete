@@ -1,4 +1,4 @@
-let timerInterval: number;
+let timerInterval: number | undefined = undefined;
 let timerTime = 0;
 
 function initializeGame(gridSize: number): HTMLDivElement[][] | undefined {
@@ -286,8 +286,12 @@ if(gameGrid) {
                 gameContainer.classList.remove('blurred');
             }
 
-            // Hide the start button
+            // Hide the start button and show the reset button
             startButton.style.display = 'none';
+            const resetButton = document.getElementById('reset-button');
+            if(resetButton) {
+                resetButton.style.display = 'block';
+            }
 
             // Start the timer
             timerInterval = setInterval(() => {
@@ -299,6 +303,49 @@ if(gameGrid) {
                     timerElement.innerText = `Time: ${minutes}:${seconds}`;
                 }
             }, 1000);
+        });
+    }
+
+    const resetButton = document.getElementById('reset-button');
+    if(resetButton) {
+        resetButton.addEventListener('click', () => {
+            if(timerInterval != undefined) {
+                clearInterval(timerInterval);
+                timerInterval = undefined;
+                timerTime = 0;
+
+                const timerElement = document.getElementById('time-elapsed');
+                if(timerElement) {
+                    timerElement.innerText = "00:00";
+                }
+
+                if(gameContainer)
+                    gameContainer.classList.add('blurred');
+
+                if(startButton)
+                    startButton.style.display = 'block';
+                
+                resetButton.style.display = 'none';
+
+                // Reset cell states and appearances
+                for(let i = 0; i < GRID_SIZE; i++) {
+                    for(let j = 0; j < GRID_SIZE; j++) {
+                        cellStates[i][j] = 0;
+                        const cell = gameGrid[i][j];
+                        cell.classList.remove('cell-marked-wrong', 'cell-marked-correct');
+                    }
+
+                    // Reset result cells
+                    const resultCellRight = gameGrid[i][GRID_SIZE];
+                    resultCellRight.classList.remove('result-cell-correct', 'result-cell-wrong');
+
+                    const resultCellBottom = gameGrid[GRID_SIZE][i];
+                    resultCellBottom.classList.remove('result-cell-correct', 'result-cell-wrong');
+                }
+
+                // Recreate numbers
+                createNumbers(gameGrid);
+            }
         });
     }
 }
