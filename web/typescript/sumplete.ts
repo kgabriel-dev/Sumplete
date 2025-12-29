@@ -175,16 +175,15 @@ function toggleCell(cell: HTMLDivElement, row: number, column: number): void {
 
     switch(newState) {
         case 0:
-            cell.classList.add('cell-unmarked');
             cell.classList.remove('cell-marked-wrong', 'cell-marked-correct');
             break;
         case 1:
             cell.classList.add('cell-marked-wrong');
-            cell.classList.remove('cell-unmarked', 'cell-marked-correct');
+            cell.classList.remove('cell-marked-correct');
             break;
         case 2:
             cell.classList.add('cell-marked-correct');
-            cell.classList.remove('cell-unmarked', 'cell-marked-wrong');
+            cell.classList.remove('cell-marked-wrong');
             break;
     }
 

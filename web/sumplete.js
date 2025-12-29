@@ -131,16 +131,15 @@ function toggleCell(cell, row, column) {
     cell.classList.remove('cell-unselected', 'cell-marked-wrong', 'cell-marked-correct');
     switch (newState) {
         case 0:
-            cell.classList.add('cell-unmarked');
             cell.classList.remove('cell-marked-wrong', 'cell-marked-correct');
             break;
         case 1:
             cell.classList.add('cell-marked-wrong');
-            cell.classList.remove('cell-unmarked', 'cell-marked-correct');
+            cell.classList.remove('cell-marked-correct');
             break;
         case 2:
             cell.classList.add('cell-marked-correct');
-            cell.classList.remove('cell-unmarked', 'cell-marked-wrong');
+            cell.classList.remove('cell-marked-wrong');
             break;
     }
     // Update the state of the corresponding result cells
