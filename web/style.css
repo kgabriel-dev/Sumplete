@@ -112,6 +112,18 @@ body {
     background-color: #ffbd2f;
     color: #181818;
     border: 5px solid #181818;
-    border-radius: 5px;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+#grid-size {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: #ffbd2f;
+    color: #181818;
+    border: 5px solid #181818;
+    border-radius: 15px;
     cursor: pointer;
 }

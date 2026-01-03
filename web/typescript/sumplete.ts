@@ -217,11 +217,11 @@ function toggleCell(cell: HTMLDivElement, row: number, column: number): void {
 
     // Update the state of the corresponding result cells
     // Check if the whole row's sum is correct - Not that all correct cells must be marked correct, but the sum must match
-    const resultCellRight = gameGrid[row][GRID_SIZE];
+    const resultCellRight = gameGrid[row][gridSize];
     let rowSum = 0;
     let expectedRowSum = parseInt(resultCellRight.innerText);
 
-    for(let j = 0; j < GRID_SIZE; j++) {
+    for(let j = 0; j < gridSize; j++) {
         if(cellStates[row][j] === 2) {
             rowSum += parseInt(gameGrid[row][j].innerText);
         }
@@ -238,11 +238,11 @@ function toggleCell(cell: HTMLDivElement, row: number, column: number): void {
     }
 
     // Check if the whole column's sum is correct
-    const resultCellBottom = gameGrid[GRID_SIZE][column];
+    const resultCellBottom = gameGrid[gridSize][column];
     let columnSum = 0;
     let expectedColumnSum = parseInt(resultCellBottom.innerText);
 
-    for(let i = 0; i < GRID_SIZE; i++) {
+    for(let i = 0; i < gridSize; i++) {
         if(cellStates[i][column] === 2) {
             columnSum += parseInt(gameGrid[i][column].innerText);
         }
@@ -257,21 +257,7 @@ function toggleCell(cell: HTMLDivElement, row: number, column: number): void {
     }
 }
 
-const GRID_SIZE = 5;
-const gameGrid = initializeGame(GRID_SIZE);
-const cellStates: number[][] = [];
-
-if(gameGrid) {
-    createNumbers(gameGrid);
-
-    // Initialize cell states
-    for(let i = 0; i < GRID_SIZE; i++) {
-        cellStates[i] = [];
-        for(let j = 0; j < GRID_SIZE; j++) {
-            cellStates[i][j] = 0; // 0: unselected, 1: marked wrong, 2: marked correct
-        }
-    }
-
+function firstInitialization(gridSize: number, gameGrid: HTMLDivElement[][]): void {
     // Blur the game container initially
     const gameContainer = document.getElementById('game-container');
     if(gameContainer) {
@@ -323,18 +309,18 @@ if(gameGrid) {
                 resetButton.style.display = 'none';
 
                 // Reset cell states and appearances
-                for(let i = 0; i < GRID_SIZE; i++) {
-                    for(let j = 0; j < GRID_SIZE; j++) {
+                for(let i = 0; i < gridSize; i++) {
+                    for(let j = 0; j < gridSize; j++) {
                         cellStates[i][j] = 0;
                         const cell = gameGrid[i][j];
                         cell.classList.remove('cell-marked-wrong', 'cell-marked-correct');
                     }
 
                     // Reset result cells
-                    const resultCellRight = gameGrid[i][GRID_SIZE];
+                    const resultCellRight = gameGrid[i][gridSize];
                     resultCellRight.classList.remove('result-cell-correct', 'result-cell-wrong');
 
-                    const resultCellBottom = gameGrid[GRID_SIZE][i];
+                    const resultCellBottom = gameGrid[gridSize][i];
                     resultCellBottom.classList.remove('result-cell-correct', 'result-cell-wrong');
                 }
 
@@ -343,4 +329,58 @@ if(gameGrid) {
             }
         });
     }
+
+    // Handle grid size selection changes
+    const gridSizeSelect = document.getElementById('grid-size') as HTMLSelectElement;
+    if(gridSizeSelect) {
+        gridSizeSelect.value = gridSize.toString();
+
+        gridSizeSelect.addEventListener('change', () => {
+            const newSize = parseInt(gridSizeSelect.value);
+            reinitializeGame(newSize);
+        });
+    }
+}
+
+function reinitializeGame(newGridSize: number): void {
+    // Clear existing grid
+    const gameContainer = document.getElementById('game-container');
+    if(gameContainer) {
+        gameContainer.innerHTML = '';
+    }
+
+    gridSize = newGridSize;
+
+    // Reinitialize the game
+    const newGameGrid = initializeGame(newGridSize);
+    if(newGameGrid) {
+        gameGrid = newGameGrid;
+        createNumbers(newGameGrid);
+
+        // Initialize cell states
+        for(let i = 0; i < newGridSize; i++) {
+            cellStates[i] = [];
+            for(let j = 0; j < newGridSize; j++) {
+                cellStates[i][j] = 0; // 0: unselected, 1: marked wrong, 2: marked correct
+            }
+        }
+    }
+}
+
+let gridSize = 5;
+let gameGrid = initializeGame(gridSize);
+const cellStates: number[][] = [];
+
+if(gameGrid) {
+    createNumbers(gameGrid);
+
+    // Initialize cell states
+    for(let i = 0; i < gridSize; i++) {
+        cellStates[i] = [];
+        for(let j = 0; j < gridSize; j++) {
+            cellStates[i][j] = 0; // 0: unselected, 1: marked wrong, 2: marked correct
+        }
+    }
+
+    firstInitialization(gridSize, gameGrid);    
 }
