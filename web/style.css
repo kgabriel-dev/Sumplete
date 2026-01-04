@@ -87,7 +87,6 @@
     font-size: 1.2em;
 }
 
-
 #game-container {
     display: inline-block;
     width: fit-content;
@@ -103,6 +102,13 @@ body, body * {
     background-color: #181818;
     color: #ffbd2f;
     font-family: "Baumans";
+    margin: 0;
+}
+
+html > body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .blurred {
@@ -132,4 +138,14 @@ body, body * {
     border: 5px solid #181818;
     border-radius: 15px;
     cursor: pointer;
+}
+
+footer {
+    margin-bottom: 20px;
+}
+
+footer > p {
+    text-align: center;
+    color: #ffbd2f;
+    font-size: 0.9em;
 }
