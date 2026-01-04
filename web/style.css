@@ -94,9 +94,15 @@
     margin-top: 20px;
 }
 
-body {
+@font-face {
+    font-family: "Baumans";
+    src: url("./assets/Baumans-Regular.ttf");
+}
+
+body, body * {
     background-color: #181818;
     color: #ffbd2f;
+    font-family: "Baumans";
 }
 
 .blurred {
