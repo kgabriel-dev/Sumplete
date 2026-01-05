@@ -149,3 +149,11 @@ footer > p {
     color: #ffbd2f;
     font-size: 0.9em;
 }
+
+#instructions {
+    margin-bottom: 75px;
+}
+
+#instructions > p {
+    margin: 10px 0;
+}
