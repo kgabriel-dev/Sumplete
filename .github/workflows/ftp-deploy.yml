@@ -3,28 +3,35 @@ name: Deploy website on push
 on:
   push:
     branches: ["main"]
+  # Enables manually triggering of Workflow with file synchronization option
+  workflow_dispatch:
+    inputs:
+      sync:
+        description: "File synchronization"
+        required: true
+        default: "delta"
 
 jobs:
   web-deploy:
-    name: Deploy
+    name: Deploy Main Branch
     runs-on: ubuntu-latest
     steps:
     - name: Get latest code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
     
     - name: Sync files
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+      uses: milanmk/actions-file-deployer@master
       with:
-        server: ${{ secrets.FTP_SERVER }}
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        port: 22
-        local-dir: web/
-        server-dir: ${{ secrets.FTP_SERVER_DIRECTORY }}
-        state-name: sync-state.json
-        dry-run: true
-        exclude: |
+        remote-protocol: "sftp"
+        remote-host: ${{ secrets.FTP_SERVER }}
+        remote-user: ${{ secrets.FTP_USERNAME }}
+        remote-password: ${{ secrets.FTP_PASSWORD }}
+        remote-port: 22
+        sync-delta-excludes: |
           **/.git*
           **/.git/**
           web/typescript/**
-        protocol: ftps
+        local-path: web/
+        remote-path: ${{ secrets.FTP_SERVER_DIRECTORY }}
