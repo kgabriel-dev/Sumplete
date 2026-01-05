@@ -30,8 +30,7 @@ jobs:
         remote-password: ${{ secrets.FTP_PASSWORD }}
         remote-port: 22
         sync-delta-excludes: |
-          **/.git*
-          **/.git/**
+          .git*
           web/typescript/**
         local-path: web/
         remote-path: ${{ secrets.FTP_SERVER_DIRECTORY }}
